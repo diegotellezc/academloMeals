@@ -42,31 +42,94 @@ exports.signup = catchAsync(async (req, res, next) => {
 });
 
 exports.login = catchAsync(async (req, res, next) => {
+  const { email, password } = req.body;
+
+  const user = await Users.findOne({
+    where: {
+      email: email.toLowerCase(),
+      status: 'available',
+    },
+  });
+
+  if (!user) {
+    return next(new AppError(`User with email:${email} was not found`, 404));
+  }
+
+  if (!(await bcrypt.compare(password, user.password))) {
+    return next(new AppError(`Wrong email or password`, 401));
+  }
+
+  const token = await generateJWT(user.id);
+
   res.status(200).json({
-    message: 'Ok',
+    status: 'success',
+    token,
+    user: {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+    },
   });
 });
 
 exports.findOrdersByUser = catchAsync(async (req, res, next) => {
+  const { user } = req;
+
   res.status(200).json({
-    message: 'Ok',
+    status: 'success',
+    results: user.orders.length,
+    user: {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+    },
+    orders: user.orders,
+    meals: user.meals,
+    restaurants: user.restaurants,
   });
 });
 
 exports.findOneOrderById = catchAsync(async (req, res, next) => {
+  const { id } = req.params;
+  const { user } = req;
+
+  const filteredOrder = user.orders.filter((order) => order.id === id);
+
+  if (!filteredOrder) {
+    return next(new AppError(`The order with id:${id} does not exist`));
+  }
+
   res.status(200).json({
-    message: 'Ok',
+    status: 'success',
+    user: {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+    },
+    order: filteredOrder,
   });
 });
 
 exports.updateUser = catchAsync(async (req, res, next) => {
+  const { user } = req;
+  const { name, email } = req.body;
+
+  await user.update({ name, email });
+
   res.status(200).json({
-    message: 'Ok',
+    status: 'success',
+    message: `The user with id:${user.id} was updated`,
   });
 });
 
 exports.deleteUser = catchAsync(async (req, res, next) => {
+  const { user } = req;
+
+  await user.update({ status: 'disabled' });
+
   res.status(200).json({
-    message: 'Ok',
+    status: 'success',
+    message: `User with id:${user.id} has been deleted`,
   });
 });
