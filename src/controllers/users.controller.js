@@ -120,6 +120,10 @@ exports.updateUser = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: 'success',
     message: `The user with id:${user.id} was updated`,
+    user: {
+      name,
+      email,
+    },
   });
 });
 

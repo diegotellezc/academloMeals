@@ -36,9 +36,8 @@ router.get(
 
 router.use('/:id', usersMiddleware.validUser);
 
-// TODO: hace falta proteger patch y delete para que solo pueda hacerlo el usuario dueño de la cuenta.
-
 router
+  .use(authMiddleware.protectAccountOwner)
   .route('/:id')
   .patch(validationsMiddleware.updateUserValidation, usersController.updateUser)
   .delete(usersController.deleteUser);
