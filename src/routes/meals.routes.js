@@ -15,3 +15,5 @@ router
   .post(mealsController.createNewMeal)
   .patch(mealsController.updateMeal)
   .delete(mealsController.deleteMeal);
+
+module.exports = router;

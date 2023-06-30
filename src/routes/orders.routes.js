@@ -14,7 +14,9 @@ router.post('/', ordersController.createNewOrder);
 router.get('/me', ordersController.findUserOrders);
 
 router
-  .use(authMiddleware.protectAccountOwner)
+  // .use(authMiddleware.protectAccountOwner)
   .route('/:id')
   .patch(ordersController.updateOrder)
   .delete(ordersController.deleteOrder);
+
+module.exports = router;

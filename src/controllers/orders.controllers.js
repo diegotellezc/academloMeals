@@ -7,7 +7,7 @@ const AppError = require('../utils/appError');
 
 exports.createNewOrder = catchAsync(async (req, res, next) => {
   // mealId, userId, totalPrice, quantity, status
-  const { quantity, mealId, status } = req.body;
+  const { quantity, mealId } = req.body;
   const { id } = req.sessionUser;
 
   const meal = await Meals.findOne({
@@ -27,7 +27,6 @@ exports.createNewOrder = catchAsync(async (req, res, next) => {
     mealId,
     quantity,
     totalPrice,
-    status,
     userId: id,
   });
 

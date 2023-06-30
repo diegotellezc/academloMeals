@@ -10,7 +10,7 @@ const router = Router();
 router
   .route('/')
   .get(restaurantsController.findRestaurants)
-  .post(restaurantsController.createNewRestaurant);
+  .post(authMiddleware.protect, restaurantsController.createNewRestaurant);
 
 router
   .route('/reviews/:restaurantId/:id')
@@ -24,3 +24,5 @@ router
   .get(restaurantsController.findRestaurantById)
   .patch(restaurantsController.updateRestaurant)
   .delete(restaurantsController.deleteRestaurant);
+
+module.exports = router;
