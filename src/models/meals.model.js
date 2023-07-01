@@ -21,9 +21,9 @@ const Meals = db.define('meals', {
     allowNull: false,
   },
   status: {
-    type: DataTypes.ENUM('available', 'disabled'),
+    type: DataTypes.ENUM('active', 'disabled'),
     allowNull: false,
-    defaultValue: 'available',
+    defaultValue: 'active',
   },
 });
 

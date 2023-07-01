@@ -30,9 +30,9 @@ const Users = db.define(
       defaultValue: 'normal',
     },
     status: {
-      type: DataTypes.ENUM('available', 'disabled'),
+      type: DataTypes.ENUM('active', 'disabled'),
       allowNull: false,
-      defaultValue: 'available',
+      defaultValue: 'active',
     },
   },
   {

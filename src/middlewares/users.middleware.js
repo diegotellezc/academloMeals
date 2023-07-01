@@ -11,7 +11,7 @@ exports.validUser = catchAsync(async (req, res, next) => {
   const user = await Users.findOne({
     where: {
       id,
-      status: 'available',
+      status: 'active',
     },
   });
 
@@ -29,7 +29,7 @@ exports.validSessionUser = catchAsync(async (req, res, next) => {
   const user = await Users.findOne({
     where: {
       id: sessionUser.id,
-      status: 'available',
+      status: 'active',
     },
     include: [
       {

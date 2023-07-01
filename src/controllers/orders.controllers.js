@@ -13,7 +13,7 @@ exports.createNewOrder = catchAsync(async (req, res, next) => {
   const meal = await Meals.findOne({
     where: {
       id: mealId,
-      status: 'available',
+      status: 'active',
     },
   });
 

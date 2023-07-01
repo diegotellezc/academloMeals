@@ -27,13 +27,13 @@ exports.protect = catchAsync(async (req, res, next) => {
   const user = await Users.findOne({
     where: {
       id: decoded.id,
-      status: 'available',
+      status: 'active',
     },
   });
 
   if (!user) {
     return next(
-      new AppError('The owner of this token it not longer available', 401)
+      new AppError('The owner of this token it not longer active', 401)
     );
   }
 

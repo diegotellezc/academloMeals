@@ -13,7 +13,7 @@ const Restaurants = db.define('restaurants', {
     allowNull: false,
   },
   address: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.STRING,
     allowNull: false,
   },
   rating: {
@@ -21,9 +21,9 @@ const Restaurants = db.define('restaurants', {
     allowNull: false,
   },
   status: {
-    type: DataTypes.ENUM('available', 'disabled'),
+    type: DataTypes.ENUM('active', 'disabled'),
     allowNull: false,
-    defaultValue: 'available',
+    defaultValue: 'active',
   },
 });
 

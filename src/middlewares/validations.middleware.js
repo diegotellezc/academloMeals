@@ -51,3 +51,14 @@ exports.updateUserValidation = [
     .withMessage('Must be a valid email'),
   validFields,
 ];
+
+exports.createRestaurantValidation = [
+  body('name').notEmpty().withMessage('Name cannot be empty'),
+  body('address').notEmpty().withMessage('Address cannot be empty'),
+  body('rating')
+    .notEmpty()
+    .withMessage('Rating cannot be empty')
+    .isInt({ min: 1, max: 5 })
+    .withMessage('Rating must be a number between 1 and 5'),
+  validFields,
+];

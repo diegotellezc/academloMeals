@@ -25,7 +25,7 @@ const Reviews = db.define('reviews', {
     allowNull: false,
   },
   status: {
-    type: DataTypes.ENUM('active', 'deleted', 'completed'),
+    type: DataTypes.ENUM('active', 'deleted'),
     allowNull: false,
     defaultValue: 'active',
   },

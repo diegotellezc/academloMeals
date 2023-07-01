@@ -7,13 +7,13 @@ const AppError = require('../utils/appError');
 exports.signup = catchAsync(async (req, res, next) => {
   const { name, email, password, role } = req.body;
 
-  const existentUser = await Users.findOne({
+  const userInDb = await Users.findOne({
     where: {
       email,
     },
   });
 
-  if (existentUser) {
+  if (userInDb) {
     return res.status(404).json({
       status: 'error',
       message: `There is already a user created in the database with the email: ${email}`,
@@ -47,7 +47,7 @@ exports.login = catchAsync(async (req, res, next) => {
   const user = await Users.findOne({
     where: {
       email: email.toLowerCase(),
-      status: 'available',
+      status: 'active',
     },
   });
 

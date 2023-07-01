@@ -10,19 +10,30 @@ const router = Router();
 router
   .route('/')
   .get(restaurantsController.findRestaurants)
-  .post(authMiddleware.protect, restaurantsController.createNewRestaurant);
+  .post(
+    authMiddleware.protect,
+    validationsMiddleware.createRestaurantValidation,
+    restaurantsController.createNewRestaurant
+  );
 
 router
   .route('/reviews/:restaurantId/:id')
-  .patch(restaurantsController.updateReviewOfRestaurant)
-  .delete(restaurantsController.deleteReviewOfRestaurant);
+  .patch(authMiddleware.protect, restaurantsController.updateReviewOfRestaurant)
+  .delete(
+    authMiddleware.protect,
+    restaurantsController.deleteReviewOfRestaurant
+  );
 
-router.post('/reviews/:id', restaurantsController.createNewReview);
+router.post(
+  '/reviews/:id',
+  authMiddleware.protect,
+  restaurantsController.createNewReview
+);
 
 router
   .route('/:id')
   .get(restaurantsController.findRestaurantById)
-  .patch(restaurantsController.updateRestaurant)
-  .delete(restaurantsController.deleteRestaurant);
+  .patch(authMiddleware.protect, restaurantsController.updateRestaurant)
+  .delete(authMiddleware.protect, restaurantsController.deleteRestaurant);
 
 module.exports = router;
