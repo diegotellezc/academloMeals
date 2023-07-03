@@ -15,6 +15,7 @@ const Restaurants = db.define('restaurants', {
   address: {
     type: DataTypes.STRING,
     allowNull: false,
+    unique: true,
   },
   rating: {
     type: DataTypes.INTEGER,

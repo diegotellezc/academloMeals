@@ -1,8 +1,6 @@
 const Orders = require('../models/orders.model');
 const Meals = require('../models/meals.model');
 const catchAsync = require('../utils/catchAsync');
-const bcrypt = require('bcryptjs');
-const generateJWT = require('../utils/jwt');
 const AppError = require('../utils/appError');
 
 exports.createNewOrder = catchAsync(async (req, res, next) => {

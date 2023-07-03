@@ -3,17 +3,36 @@ const mealsController = require('../controllers/meals.controllers');
 // middlewares
 const validationsMiddleware = require('../middlewares/validations.middleware');
 const authMiddleware = require('../middlewares/auth.middleware');
+const restaurantsMiddleware = require('../middlewares/restaurants.middleware');
+const mealsMiddleware = require('../middlewares/meals.middleware');
 
 const { Router } = require('express');
 const router = Router();
 
 router.get('/', mealsController.findMeals);
 
+router.post(
+  '/:id',
+  authMiddleware.protect,
+  authMiddleware.restrictTo('admin'),
+  validationsMiddleware.createMealValidation,
+  restaurantsMiddleware.validRestaurant,
+  mealsController.createNewMeal
+);
+
 router
+  .use('/:id', mealsMiddleware.validMeal)
   .route('/:id')
   .get(mealsController.findMealById)
-  .post(mealsController.createNewMeal)
-  .patch(mealsController.updateMeal)
-  .delete(mealsController.deleteMeal);
+  .patch(
+    authMiddleware.protect,
+    authMiddleware.restrictTo('admin'),
+    mealsController.updateMeal
+  )
+  .delete(
+    authMiddleware.protect,
+    authMiddleware.restrictTo('admin'),
+    mealsController.deleteMeal
+  );
 
 module.exports = router;

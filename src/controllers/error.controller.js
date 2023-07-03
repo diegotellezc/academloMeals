@@ -13,7 +13,8 @@ const handleJWTError = () => {
 };
 
 const sendErrorDev = (err, res) => {
-  res.status(err.statusCode).json({
+  logger.info(err);
+  return res.status(err.statusCode).json({
     status: err.status,
     error: err,
     message: err.message,
@@ -22,14 +23,16 @@ const sendErrorDev = (err, res) => {
 };
 
 const sendErrorProd = (err, res) => {
+  logger.info(err);
+  //Operational, trusted error: send message to client
   if (err.isOperational) {
-    res.status(err.statusCode).json({
+    return res.status(err.statusCode).json({
       status: err.status,
       message: err.message,
     });
   } else {
-    console.error('ERROR 🧨', err);
-    res.status(500).json({
+    //Programming or other unknown error: don't leak error detail
+    return res.status(500).json({
       status: 'fail',
       message: 'Something went very wrong!',
     });

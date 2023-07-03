@@ -33,7 +33,7 @@ exports.protect = catchAsync(async (req, res, next) => {
 
   if (!user) {
     return next(
-      new AppError('The owner of this token it not longer active', 401)
+      new AppError('The owner of this token is not longer active', 401)
     );
   }
 
@@ -50,3 +50,15 @@ exports.protectAccountOwner = catchAsync(async (req, res, next) => {
 
   next();
 });
+
+exports.restrictTo = (...roles) => {
+  return (req, res, next) => {
+    if (!roles.includes(req.sessionUser.role)) {
+      return next(
+        new AppError('You do not have permission to perform this action!', 403)
+      );
+    }
+
+    next();
+  };
+};
