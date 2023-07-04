@@ -94,9 +94,9 @@ exports.findOneOrderById = catchAsync(async (req, res, next) => {
   const { id } = req.params;
   const { user } = req;
 
-  const filteredOrder = user.orders.filter((order) => order.id === id);
+  const filteredOrder = user.orders.filter((order) => order.id === +id);
 
-  if (!filteredOrder) {
+  if (filteredOrder.length === 0) {
     return next(new AppError(`The order with id:${id} does not exist`));
   }
 

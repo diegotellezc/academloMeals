@@ -8,7 +8,9 @@ exports.findMeals = catchAsync(async (req, res, next) => {
     where: {
       status: 'active',
     },
-    attributes: { exclude: ['createdAt', 'updatedAt', 'status'] },
+    attributes: {
+      exclude: ['createdAt', 'updatedAt', 'status', 'restaurantId'],
+    },
     include: [
       {
         model: Restaurants,

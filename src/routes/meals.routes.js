@@ -15,7 +15,7 @@ router.post(
   '/:id',
   authMiddleware.protect,
   authMiddleware.restrictTo('admin'),
-  validationsMiddleware.createMealValidation,
+  validationsMiddleware.MealValidation,
   restaurantsMiddleware.validRestaurant,
   mealsController.createNewMeal
 );
@@ -27,6 +27,7 @@ router
   .patch(
     authMiddleware.protect,
     authMiddleware.restrictTo('admin'),
+    validationsMiddleware.MealValidation,
     mealsController.updateMeal
   )
   .delete(

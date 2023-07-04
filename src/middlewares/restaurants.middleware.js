@@ -17,10 +17,11 @@ exports.validRestaurant = catchAsync(async (req, res, next) => {
     },
     include: [
       {
-        model: Meals,
+        model: Reviews,
+        attributes: { exclude: ['createdAt', 'updatedAt', 'restaurantId'] },
       },
       {
-        model: Reviews,
+        model: Meals,
       },
     ],
   });

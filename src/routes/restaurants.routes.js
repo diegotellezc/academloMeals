@@ -22,14 +22,14 @@ router
   .route('/reviews/:restaurantId/:id')
   .patch(
     authMiddleware.protect,
-    authMiddleware.protectAccountOwner,
+    authMiddleware.protectAccountOwnerByReview,
     validationsMiddleware.reviewValidation,
     restaurantsMiddleware.validReview,
     restaurantsController.updateReview
   )
   .delete(
     authMiddleware.protect,
-    authMiddleware.protectAccountOwner,
+    authMiddleware.protectAccountOwnerByReview,
     restaurantsMiddleware.validReview,
     restaurantsController.deleteReview
   );

@@ -34,12 +34,27 @@ exports.validSessionUser = catchAsync(async (req, res, next) => {
     include: [
       {
         model: Orders,
+        attributes: {
+          exclude: ['mealId', 'userId', 'status', 'updatedAt', 'createdAt'],
+        },
         include: [
           {
             model: Meals,
+            attributes: {
+              exclude: [
+                'status',
+                'restaurantId',
+                'userId',
+                'updatedAt',
+                'createdAt',
+              ],
+            },
             include: [
               {
                 model: Restaurants,
+                attributes: {
+                  exclude: ['status', 'updatedAt', 'createdAt'],
+                },
               },
             ],
           },

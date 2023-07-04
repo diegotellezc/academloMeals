@@ -1,10 +1,10 @@
 const Orders = require('../models/orders.model');
 const Meals = require('../models/meals.model');
+const Restaurants = require('../models/restaurants.model');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 
 exports.createNewOrder = catchAsync(async (req, res, next) => {
-  // mealId, userId, totalPrice, quantity, status
   const { quantity, mealId } = req.body;
   const { id } = req.sessionUser;
 
@@ -13,6 +13,14 @@ exports.createNewOrder = catchAsync(async (req, res, next) => {
       id: mealId,
       status: 'active',
     },
+    include: [
+      {
+        model: Restaurants,
+        attributes: {
+          exclude: ['status', 'updatedAt', 'createdAt'],
+        },
+      },
+    ],
   });
 
   if (!meal) {
@@ -30,32 +38,85 @@ exports.createNewOrder = catchAsync(async (req, res, next) => {
 
   res.status(201).json({
     status: 'success',
-    message: 'TThe order was created successfully',
-    order,
-    meal,
+    message: 'The order was created successfully',
+    order: {
+      id: order.id,
+      quantity: order.quantity,
+      totalPrice: order.totalPrice,
+    },
+    meal: {
+      id: meal.id,
+      name: meal.name,
+      price: meal.price,
+      restaurant: meal.restaurant,
+    },
   });
 });
 
-exports.findUserOrders = catchAsync(async (req, res, next) => {
-  res.status(201).json({
-    status: 'success',
-  });
-});
+exports.findOrders = catchAsync(async (req, res, next) => {
+  const { sessionUser } = req;
 
-exports.protectAccountOwner = catchAsync(async (req, res, next) => {
+  const orders = await Orders.findAll({
+    where: {
+      status: 'active',
+      userId: sessionUser.id,
+    },
+    attributes: {
+      exclude: ['status', 'mealId', 'userId', 'updatedAt', 'createdAt'],
+    },
+    include: [
+      {
+        model: Meals,
+        include: [
+          {
+            model: Restaurants,
+            attributes: {
+              exclude: ['status', 'updatedAt', 'createdAt'],
+            },
+          },
+        ],
+        attributes: {
+          exclude: [
+            'status',
+            'restaurantId',
+            'userId',
+            'updatedAt',
+            'createdAt',
+          ],
+        },
+      },
+    ],
+  });
+
   res.status(201).json({
     status: 'success',
+    results: orders.length,
+    orders,
   });
 });
 
 exports.updateOrder = catchAsync(async (req, res, next) => {
+  const { order } = req;
+
+  const updatedOrder = await order.update({ status: 'completed' });
   res.status(201).json({
     status: 'success',
+    message: 'The order was updated.',
+    updatedOrder: {
+      id: order.id,
+      totalPrice: order.totalPrice,
+      meal: order.meal.name,
+      status: order.status,
+    },
   });
 });
 
 exports.deleteOrder = catchAsync(async (req, res, next) => {
+  const { order } = req;
+
+  await order.update({ status: 'cancelled' });
   res.status(201).json({
     status: 'success',
+    message: 'The order was deleted.',
   });
 });

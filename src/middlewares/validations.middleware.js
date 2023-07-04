@@ -79,12 +79,26 @@ exports.reviewValidation = [
   validFields,
 ];
 
-exports.createMealValidation = [
+exports.MealValidation = [
   body('name').notEmpty().withMessage('Name cannot be empty.'),
   body('price')
     .notEmpty()
     .withMessage('Price cannot be empty.')
     .isInt({ min: 1 })
     .withMessage('Price must be a number'),
+  validFields,
+];
+
+exports.orderValidation = [
+  body('quantity')
+    .notEmpty()
+    .withMessage('Quantity cannot be empty.')
+    .isInt()
+    .withMessage('Quantity must be a number'),
+  body('mealId')
+    .notEmpty()
+    .withMessage('mealId cannot be empty.')
+    .isInt()
+    .withMessage('mealId must be a number'),
   validFields,
 ];

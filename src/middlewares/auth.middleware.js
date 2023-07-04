@@ -1,6 +1,8 @@
 const { promisify } = require('util');
 const jwt = require('jsonwebtoken');
 const Users = require('../models/users.model');
+const Reviews = require('../models/reviews.model');
+const Orders = require('../models/orders.model');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 
@@ -45,6 +47,36 @@ exports.protectAccountOwner = catchAsync(async (req, res, next) => {
   const { user, sessionUser } = req;
 
   if (user.id !== sessionUser.id) {
+    return next(new AppError('You do not own this account.', 401));
+  }
+
+  next();
+});
+
+exports.protectAccountOwnerByReview = catchAsync(async (req, res, next) => {
+  const { sessionUser } = req;
+  const { id } = req.params;
+
+  const review = await Reviews.findOne({
+    where: { id },
+  });
+
+  if (review.userId !== sessionUser.id) {
+    return next(new AppError('You do not own this account.', 401));
+  }
+
+  next();
+});
+
+exports.protectAccountOwnerByOrder = catchAsync(async (req, res, next) => {
+  const { sessionUser } = req;
+  const { id } = req.params;
+
+  const order = await Orders.findOne({
+    where: { id },
+  });
+
+  if (order.userId !== sessionUser.id) {
     return next(new AppError('You do not own this account.', 401));
   }
 

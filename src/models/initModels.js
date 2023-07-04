@@ -5,20 +5,20 @@ const Reviews = require('./reviews.model');
 const Restaurants = require('./restaurants.model');
 
 const initModel = () => {
-  Users.hasMany(Orders, { foreignKey: 'userId' });
-  Orders.belongsTo(Users, { foreignKey: 'userId' });
+  Users.hasMany(Orders);
+  Orders.belongsTo(Users);
 
-  Users.hasMany(Reviews, { foreignKey: 'userId' });
-  Reviews.belongsTo(Users, { foreignKey: 'userId' });
+  Users.hasMany(Reviews);
+  Reviews.belongsTo(Users);
 
-  Meals.hasOne(Orders, { foreignKey: 'mealId' });
-  Orders.belongsTo(Meals, { foreignKey: 'mealId' });
+  Meals.hasOne(Orders);
+  Orders.belongsTo(Meals);
 
-  Restaurants.hasMany(Meals, { foreignKey: 'restaurantId' });
-  Meals.belongsTo(Restaurants, { foreignKey: 'restaurantId' });
+  Restaurants.hasMany(Meals);
+  Meals.belongsTo(Restaurants);
 
-  Restaurants.hasMany(Reviews, { foreignKey: 'restaurantId' });
-  Reviews.belongsTo(Restaurants, { foreignKey: 'restaurantId' });
+  Restaurants.hasMany(Reviews);
+  Reviews.belongsTo(Restaurants);
 };
 
 module.exports = initModel;
