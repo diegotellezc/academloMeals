@@ -18,7 +18,9 @@ exports.validRestaurant = catchAsync(async (req, res, next) => {
     include: [
       {
         model: Reviews,
+        where: { status: 'active' },
         attributes: { exclude: ['createdAt', 'updatedAt', 'restaurantId'] },
+        required: false,
       },
       {
         model: Meals,

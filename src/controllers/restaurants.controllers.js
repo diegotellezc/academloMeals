@@ -11,7 +11,9 @@ exports.findRestaurants = catchAsync(async (req, res, next) => {
     include: [
       {
         model: Reviews,
+        where: { status: 'active' },
         attributes: { exclude: ['createdAt', 'updatedAt', 'restaurantId'] },
+        required: false,
       },
     ],
     attributes: { exclude: ['createdAt', 'updatedAt', 'status'] },
